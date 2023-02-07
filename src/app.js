@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 app.post("/signup", async (req, res) => {
   const data = req.body;
   const length = Object.keys(data).length;
-  if (length == 5) {
+  if (length == 4) {
     try {
       const user = await new User({ ...data });
       user.save();
@@ -31,8 +31,6 @@ app.post("/signup", async (req, res) => {
     res.status(400).send("please fill all fields");
   }
 });
-
-
 
 // user loign method , user will loing from this method
 app.post("/login_user", async (req, res) => {
@@ -58,17 +56,30 @@ app.post("/login_owner", async (req, res) => {
   const length = Object.keys(data).length;
   if (length == 2) {
     try {
-      const { userid: userid, password } = data;
+      const { userid, password } = data;
       const owner = await Owner.findOne({ userid: userid, password: password });
       if (!owner) {
         res.status(404).send("invalid userid or password");
       }
       res.status(200).send("your login was successful");
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   } else {
     res.status(400).send("please fill all fields");
   }
 });
+
+app.get("/ownerdata", async (req, res) => {
+  try{
+         const data= await Owner.findOne({userid:"testuser"})
+         console.log(data)
+         res.send(data)
+  }
+  catch (err) {
+
+  }
+})
 
 const port = process.env.PORT || 3000;
 connectDb().then(() => {
