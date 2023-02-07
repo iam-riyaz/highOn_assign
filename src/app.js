@@ -4,6 +4,7 @@ const connectDb = require("./config/db");
 const { connect } = require("mongoose");
 const User = require("./models/userSchema");
 const cors = require("cors");
+const Owner = require("./models/ownerSchema");
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,8 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+
+
 // user loign method , user will loing from this method
 app.post("/login_user", async (req, res) => {
   const data = req.body;
@@ -56,9 +59,9 @@ app.post("/login_owner", async (req, res) => {
   if (length == 2) {
     try {
       const { userid: userid, password } = data;
-      const user = await User.findOne({ userid: userid, password: password });
-      if (!user) {
-        res.status(404).send("invalid username or password");
+      const owner = await Owner.findOne({ userid: userid, password: password });
+      if (!owner) {
+        res.status(404).send("invalid userid or password");
       }
       res.status(200).send("your login was successful");
     } catch (err) {}

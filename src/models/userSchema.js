@@ -8,7 +8,8 @@ const userSchema= new mongoose.Schema({
     address:{type:"string",default:""},
     latitude:{type:"string",default:""},
     longitude:{type:"string",default:""},
-    acType:{type:"string",default:"user"}
+    acType:{type:"string",default:"user"},
+    list:{ownername:{type:"string"},address:{type:"string"},timedate:{type:"string"}}
     
 })
 

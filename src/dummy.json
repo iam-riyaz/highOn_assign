@@ -1,0 +1,16 @@
+[
+    {"name":"testUser",
+     "email":"testEmail@testemail.com",
+    "userid":"testuser",
+     "password":"test@123",
+    "acType":"owner",
+"list":{"data":[{"name":"","address":"","timedate":""}]}
+},
+{"name":"dummyUser",
+     "email":"dummyEmail@testemail.com",
+    "userid":"dummyuser",
+     "password":"test@321",
+    "acType":"owner",
+"list":{"data":[{"name":"","address":"","timedate":""}]}
+}
+]
