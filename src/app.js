@@ -5,8 +5,7 @@ const { connect } = require("mongoose");
 const User = require("./models/userSchema");
 const cors = require("cors");
 const Owner = require("./models/ownerSchema");
-const QRCode = require("qrcode")
-
+const QRCode = require("qrcode");
 
 dotenv.config();
 const app = express();
@@ -45,7 +44,7 @@ app.post("/login_user", async (req, res) => {
       if (!user) {
         res.status(404).send("invalid username or password");
       }
-      res.status(200).send("your login was successful");
+      res.status(200).send(user._id);
     } catch (err) {}
   } else {
     res.status(400).send("please fill all fields");
@@ -72,47 +71,44 @@ app.post("/login_owner", async (req, res) => {
   }
 });
 
-app.get("/create_qr", async(req, res) => {
+// create QR code
+app.post("/create_qr", async (req, res) => {
+  let data = req.body.id;
 
-  let data={
-    "_id": {
-      "$oid": "63e1eefbdc6c467afb7cecb6"
-    },
-    "name": "r1",
-    "email": "r1@r1.com",
-    "userid": "r1",
-    "password": "r1",
-    "address": "",
-    "latitude": "",
-    "longitude": "",
-    "acType": "user",
-    "__v": 0
+  QRCode.toDataURL(data)
+    .then((url) => {
+      res.send(url);
+
+      console.log(url);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.send(err);
+    });
+});
+
+// update user data, add qr data and unique code
+app.patch("/update_user", async (req, res) => {
+  const { latitude, longitude, qrcode, code, id } = req.body;
+
+  const data = await User.findOneAndUpdate(
+    { _id: id },
+    { latitude: latitude, longitude: longitude, qrcode: qrcode, code: code }
+  );
+
+  if (!data) {
+    res.send("request is failed");
   }
-
-  let strData= JSON.stringify(data)
-  QRCode.toDataURL(strData)
-  .then(url => {
-    res.send(url)
-
-    console.log(url)
-  })
-  .catch(err => {
-    console.error(err)
-    res.send(err)
-  })
-
-})
+  res.send("updated successfully");
+});
 
 app.get("/ownerdata", async (req, res) => {
-  try{
-         const data= await Owner.findOne({userid:"testuser"})
-         console.log(data)
-         res.send(data)
-  }
-  catch (err) {
-
-  }
-})
+  try {
+    const data = await Owner.findOne({ userid: "testuser" });
+    console.log(data);
+    res.send(data);
+  } catch (err) {}
+});
 
 const port = process.env.PORT || 3000;
 connectDb().then(() => {

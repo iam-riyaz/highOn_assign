@@ -9,7 +9,10 @@ const userSchema= new mongoose.Schema({
     latitude:{type:"string",default:""},
     longitude:{type:"string",default:""},
     acType:{type:"string",default:"user"},
+    qrcode:{type:"string"},
+    code:{type:"string"},
     list:{ownername:{type:"string"},address:{type:"string"},timedate:{type:"string"}}
+
     
 })
 
