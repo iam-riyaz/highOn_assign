@@ -5,6 +5,8 @@ const { connect } = require("mongoose");
 const User = require("./models/userSchema");
 const cors = require("cors");
 const Owner = require("./models/ownerSchema");
+const QRCode = require("qrcode")
+
 
 dotenv.config();
 const app = express();
@@ -69,6 +71,37 @@ app.post("/login_owner", async (req, res) => {
     res.status(400).send("please fill all fields");
   }
 });
+
+app.get("/create_qr", async(req, res) => {
+
+  let data={
+    "_id": {
+      "$oid": "63e1eefbdc6c467afb7cecb6"
+    },
+    "name": "r1",
+    "email": "r1@r1.com",
+    "userid": "r1",
+    "password": "r1",
+    "address": "",
+    "latitude": "",
+    "longitude": "",
+    "acType": "user",
+    "__v": 0
+  }
+
+  let strData= JSON.stringify(data)
+  QRCode.toDataURL(strData)
+  .then(url => {
+    res.send(url)
+
+    console.log(url)
+  })
+  .catch(err => {
+    console.error(err)
+    res.send(err)
+  })
+
+})
 
 app.get("/ownerdata", async (req, res) => {
   try{
